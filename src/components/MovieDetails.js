@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import StarRating from "./startRating/StarRating";
 import { Loader } from "./Loader";
-import { Box } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import useFetchMovies from "./customhooks/useFetchMovies";
 
 export function MovieDetails({
@@ -56,17 +56,20 @@ export function MovieDetails({
             </button>
             <img src={movie.Poster} alt="poster" />
             <div className="details-overview">
-              <h2>{movie.Title}</h2>
-              <p>
+              <Typography variant="h2">{movie.Title}</Typography>
+
+              <Typography variant="h6">
                 {movie.Released} &bull; {movie.Runtime}
-              </p>
+              </Typography>
               <p>{movie.Rating}</p>
               <p>
-                <span>🦘{movie.imdbRating}</span>
+                <Box component="span">
+                  <Typography variant="h4">🎥 {movie.imdbRating}</Typography>
+                </Box>
               </p>
             </div>
           </header>
-          <section>
+          <Box component={"section"} sx={{ marginLeft: "5px" }}>
             <div className="rating">
               <StarRating
                 maxRating={10}
@@ -74,22 +77,32 @@ export function MovieDetails({
                 onSetStarCount={onSetUserRating}
               />
             </div>
-            <button
-              className="btn-add"
+            <Button
+              // className="btn-add"
+              variant="contained"
+              sx={{
+                marginLeft: "25px",
+              }}
               onClick={() => {
                 onHandleWatchList(movie);
                 onCloseClick();
               }}
             >
               + add to list
-            </button>
+            </Button>
 
             <p>
-              <em>{movie.Plot}</em>
+              <Box component="em">
+                <Typography variant="h6">{movie.Plot}</Typography>
+              </Box>
             </p>
-            <p>Starring {movie.Actor}</p>
-            <p>Directed By {movie.Director}</p>
-          </section>
+            <Box component="p">
+              <Typography variant="h6">Starring {movie.Actor}</Typography>
+            </Box>
+            <Box component="p">
+              <Typography variant="h6">Directed By {movie.Director}</Typography>
+            </Box>
+          </Box>
         </>
       )}
     </Box>

@@ -55,8 +55,6 @@ export default function App() {
     }
   }
 
-  //const query = "asdftg";
-
   return (
     <>
       <NavBar>
