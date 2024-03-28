@@ -3,7 +3,6 @@ import { useState } from "react";
 
 export function MovieList({ movies, onHandleMovieClick }) {
   const [isOpen1, setIsOpen1] = useState(true);
-  console.log(movies);
   return (
     <div className="box">
       <button

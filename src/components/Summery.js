@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { average } from "../App";
+import { average } from "./static data/data";
 
 export function Summery({ children, watched, selectedID }) {
   const [isOpen2, setIsOpen2] = useState(true);
@@ -15,7 +15,6 @@ export function Summery({ children, watched, selectedID }) {
   );
   //const avgRuntime = calculateAverage(watched.map((movie) => movie.runtime));
   const avgRuntime = average(watched.map((movie) => movie.runtime));
-  console.log(avgRuntime);
   const runtime = avgRuntime.toFixed(2);
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
   // const avgUserRating = average(watched.map((movie) => movie.userRating));

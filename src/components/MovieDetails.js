@@ -1,38 +1,18 @@
 import { useEffect, useState } from "react";
 import StarRating from "./startRating/StarRating";
-import { key } from "../App";
 import { Loader } from "./Loader";
 import { Box } from "@mui/material";
+import useFetchMovies from "./customhooks/useFetchMovies";
 
 export function MovieDetails({
   selectedID,
   onCloseClick,
   onHandleWatchList,
   onSetUserRating,
-  userRating,
 }) {
-  const [movie, setMovie] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  const { movie, isLoading } = useFetchMovies(selectedID, "i");
 
-  //fetching data from omdb movie api
-  useEffect(
-    function () {
-      async function getMovieDetails() {
-        setIsLoading(true);
-        // avoiding race conditon
-        const result = await fetch(
-          `http://www.omdbapi.com/?apikey=${key}&i=${selectedID}`
-        );
-        const data = await result.json();
-        setIsLoading(false);
-        setMovie(data);
-      }
-      getMovieDetails();
-    },
-    [selectedID]
-  );
-
-  // chaning the page title as we click new movies
+  // chaning the page title as we click new movie
   useEffect(
     function () {
       if (!movie.Title) return;
@@ -61,6 +41,7 @@ export function MovieDetails({
     },
     [onCloseClick]
   );
+
   return (
     <Box
       sx={{ backgroundColor: "#343a40", borderRadius: "10px", color: "white" }}

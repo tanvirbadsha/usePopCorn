@@ -7,46 +7,16 @@ import { RenderList } from "./components/RenderList";
 import { Search } from "./components/Search";
 import { MovieDetails } from "./components/MovieDetails";
 import { Loader } from "./components/Loader";
-
-const tempWatchedData = [
-  {
-    imdbID: "tt1375666",
-    Title: "Inception",
-    Year: "2010",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-    runtime: 148,
-    imdbRating: 8.8,
-    userRating: 10,
-  },
-  {
-    imdbID: "tt0088763",
-    Title: "Back to the Future",
-    Year: "1985",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
-    runtime: 116,
-    imdbRating: 8.5,
-    userRating: 9,
-  },
-];
-
-export const average = (arr) =>
-  arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
-
-export const key = "52155ca3";
+import { tempWatchedData } from "./components/static data/data";
+import useFetchMovies from "./components/customhooks/useFetchMovies";
 
 export default function App() {
-  const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
   const [query, setQuery] = useState("");
+  const { movies, isLoading, error } = useFetchMovies(query);
   const [selectedID, setSelectedID] = useState(null);
   const [userRating, setUserRating] = useState("");
   const countRef = useRef(0);
-
-  const controller = new AbortController();
 
   function handleMovieClick(id) {
     setSelectedID((prevId) => (id === prevId ? null : id));
@@ -86,44 +56,7 @@ export default function App() {
   }
 
   //const query = "asdftg";
-  useEffect(
-    function () {
-      async function fetchMovies() {
-        try {
-          setIsLoading(true);
-          setError("");
-          const result = await fetch(
-            `http://www.omdbapi.com/?apikey=${key}&s=${query}`,
-            { signal: controller.signal }
-          );
-          if (!result.ok) throw new Error("Data Fetching Failed!...");
-          const data = await result.json();
-          //console.log(data);
-          if (data.Response === "False")
-            throw new Error("Movie name not found!");
-          setMovies(data.Search);
-          setError("");
-        } catch (err) {
-          console.error(err.message);
-          if (err.name !== "AbortError") {
-            setError(err.message);
-          }
-        } finally {
-          setIsLoading(false);
-        }
-      }
-      if (query.length < 3) {
-        setMovies([]);
-        setError("");
-        return;
-      }
-      fetchMovies();
-      return function () {
-        controller.abort();
-      };
-    },
-    [query]
-  );
+
   return (
     <>
       <NavBar>
